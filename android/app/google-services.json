@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "919541295083",
+    "project_id": "ucsc-canteen-19001355",
+    "storage_bucket": "ucsc-canteen-19001355.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919541295083:android:1be09fecca0ec43c4d5bae",
+        "android_client_info": {
+          "package_name": "com.example.ucsc_canteen_19001355"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919541295083-spla4cqrq7rn8e1udtkjb2g8dkn17gib.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.ucsc_canteen_19001355",
+            "certificate_hash": "b7822ab2766f68d5212199ca3ee4ab36fa89a819"
+          }
+        },
+        {
+          "client_id": "919541295083-vhrgvd284gr5pkq1t9uk22k3e9leelag.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD7rYTEujebyc33V94Kke7jHK0cetdbcmw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "919541295083-vhrgvd284gr5pkq1t9uk22k3e9leelag.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "919541295083-lgvvpgqp9jihsq1nt6quueifpl928mpj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.ucscCanteen19001355"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
