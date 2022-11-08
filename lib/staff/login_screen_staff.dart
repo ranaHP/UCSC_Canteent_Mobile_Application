@@ -1,5 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:ucsc_canteen_19001355/authentication.dart';
+import 'package:ucsc_canteen_19001355/home_screen.dart';
+import 'package:ucsc_canteen_19001355/staff/canteen_home_page.dart';
 import 'package:ucsc_canteen_19001355/student/login_screen.dart';
+import 'package:ucsc_canteen_19001355/student/registration.dart';
 
 class LoginScreenStaff extends StatefulWidget {
   const LoginScreenStaff({Key? key}) : super(key: key);
@@ -12,6 +18,71 @@ class LoginScreenStaff extends StatefulWidget {
 class _LoginScreenStaffState extends State<LoginScreenStaff> {
   TextEditingController EmailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> changeCurrentRole() async {
+    final SharedPreferences prefs = await _prefs;
+    // final int counter = (prefs.getInt('counter') ?? 0) + 1;
+    prefs.setString('current_role', 'staff');
+  }
+
+  Future<void> _showMyDialog(String result) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Login Fails', style: TextStyle(color: Colors.red)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Reason - '),
+                Container(height: 10),
+                Text(result),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Try Again'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                EmailController.clear();
+                passwordController.clear();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void login() {
+    EmailController.text = "staff@ucsc.com";
+    passwordController.text = "abc123";
+    // EmailController.text = "hansana876@gmail.com";
+    // passwordController.text = "cybertcc123";
+
+    AuthenticationHelper()
+        .signIn(email: EmailController.text, password: passwordController.text)
+        .then((result) {
+      if (result == null) {
+        changeCurrentRole();
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const StaffHomeScreen()));
+      } else {
+        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        //   content: Text(
+        //     result,
+        //     style: TextStyle(fontSize: 16),
+        //   ),
+        // ));
+        _showMyDialog(result);
+      }
+    });
+  }
+
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +126,7 @@ class _LoginScreenStaffState extends State<LoginScreenStaff> {
             padding: const EdgeInsets.all(10),
             child: TextField(
               controller: EmailController,
+              autofocus: true,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Email Address',
@@ -93,6 +165,7 @@ class _LoginScreenStaffState extends State<LoginScreenStaff> {
                 onPressed: () {
                   print(EmailController.text);
                   print(passwordController.text);
+                  login();
                 },
               )),
           // Row(

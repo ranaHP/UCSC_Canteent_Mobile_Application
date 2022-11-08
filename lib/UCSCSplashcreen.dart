@@ -3,7 +3,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ucsc_canteen_19001355/home_screen.dart';
+import 'package:ucsc_canteen_19001355/staff/canteen_food_page%20.dart';
+import 'package:ucsc_canteen_19001355/staff/canteen_home_page.dart';
+import 'package:ucsc_canteen_19001355/student/food_page%20.dart';
 import 'package:ucsc_canteen_19001355/student/login_screen.dart';
 
 class UcscSplashScreen extends StatefulWidget {
@@ -14,6 +18,8 @@ class UcscSplashScreen extends StatefulWidget {
 }
 
 class _UcscSplashScreenState extends State<UcscSplashScreen> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
   @override
   void initState() {
     super.initState();
@@ -21,8 +27,17 @@ class _UcscSplashScreenState extends State<UcscSplashScreen> {
     startTime();
   }
 
+  Future<String> getCurrentRole() async {
+    final SharedPreferences prefs = await _prefs;
+    final String c_role =
+        prefs.getString('current_role') == null ? "student" : "staff";
+    print("-------user role ----------------------");
+    print(c_role);
+    return c_role;
+  }
+
   startTime() async {
-    var duration = const Duration(seconds: 2);
+    var duration = const Duration(seconds: 1);
     return Timer(duration, route);
   }
 
@@ -35,8 +50,24 @@ class _UcscSplashScreenState extends State<UcscSplashScreen> {
             MaterialPageRoute(
                 builder: (BuildContext context) => const LoginScreen()));
       } else {
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(builder: (BuildContext context) => HomeScreen()));
+        getCurrentRole().then((c_role) => {
+              if (c_role == "staff")
+                {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const StaffHomeScreen()))
+                }
+              else
+                {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              const StudentFoodScreen()))
+                }
+            });
       }
     });
   }

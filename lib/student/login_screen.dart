@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ucsc_canteen_19001355/authentication.dart';
 import 'package:ucsc_canteen_19001355/home_screen.dart';
 import 'package:ucsc_canteen_19001355/main.dart';
 import 'package:ucsc_canteen_19001355/staff/login_screen_staff.dart';
+import 'package:ucsc_canteen_19001355/student/food_page%20.dart';
 import 'package:ucsc_canteen_19001355/student/registration.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,6 +20,15 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController EmailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  Future<void> changeCurrentRole() async {
+    final SharedPreferences prefs = await _prefs;
+    // final int counter = (prefs.getInt('counter') ?? 0) + 1;
+    await prefs.remove('current_role');
+    await prefs.setString('current_role', 'student');
+    print('----------asdasd ----------asdas -');
+  }
 
   Future<void> _showMyDialog(String result) async {
     return showDialog<void>(
@@ -67,8 +78,9 @@ class _LoginScreenState extends State<LoginScreen> {
         .signIn(email: EmailController.text, password: passwordController.text)
         .then((result) {
       if (result == null) {
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        changeCurrentRole();
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => StudentFoodScreen()));
       } else {
         // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         //   content: Text(
@@ -100,8 +112,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (result != null) {
         // ignore: use_build_context_synchronously
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+        changeCurrentRole();
+        // ignore: use_build_context_synchronously
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (context) => const StudentFoodScreen()));
       } // if result not null we simply call the MaterialpageRoute,
       // for go to the HomePage screen
     }
