@@ -20,15 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController EmailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 
-  Future<void> changeCurrentRole() async {
-    final SharedPreferences prefs = await _prefs;
-    // final int counter = (prefs.getInt('counter') ?? 0) + 1;
-    await prefs.remove('current_role');
-    await prefs.setString('current_role', 'student');
-    print('----------asdasd ----------asdas -');
-  }
 
   Future<void> _showMyDialog(String result) async {
     return showDialog<void>(
@@ -75,19 +67,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login() {
     AuthenticationHelper()
-        .signIn(email: EmailController.text, password: passwordController.text)
+        .signIn(email: EmailController.text, password: passwordController.text , role: "student")
         .then((result) {
       if (result == null) {
-        changeCurrentRole();
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => StudentFoodScreen()));
       } else {
-        // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        //   content: Text(
-        //     result,
-        //     style: TextStyle(fontSize: 16),
-        //   ),
-        // ));
         _showMyDialog(result);
       }
     });
@@ -112,19 +97,18 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (result != null) {
         // ignore: use_build_context_synchronously
-        changeCurrentRole();
-        // ignore: use_build_context_synchronously
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const StudentFoodScreen()));
-      } // if result not null we simply call the MaterialpageRoute,
-      // for go to the HomePage screen
+      } else {
+        _showMyDialog("No user available for this email");
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

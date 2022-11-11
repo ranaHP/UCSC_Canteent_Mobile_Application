@@ -112,7 +112,7 @@ class _RegistrationStudentState extends State<RegistrationStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

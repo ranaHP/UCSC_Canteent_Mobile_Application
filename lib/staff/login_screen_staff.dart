@@ -64,10 +64,9 @@ class _LoginScreenStaffState extends State<LoginScreenStaff> {
     // passwordController.text = "cybertcc123";
 
     AuthenticationHelper()
-        .signIn(email: EmailController.text, password: passwordController.text)
+        .signIn(email: EmailController.text, password: passwordController.text, role: "staff")
         .then((result) {
       if (result == null) {
-        changeCurrentRole();
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (context) => const StaffHomeScreen()));
       } else {
@@ -88,7 +87,7 @@ class _LoginScreenStaffState extends State<LoginScreenStaff> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
+      body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[

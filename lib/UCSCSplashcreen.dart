@@ -29,10 +29,11 @@ class _UcscSplashScreenState extends State<UcscSplashScreen> {
 
   Future<String> getCurrentRole() async {
     final SharedPreferences prefs = await _prefs;
-    final String c_role =
-        prefs.getString('current_role') == null ? "student" : "staff";
+    final String c_role = await prefs.getString('current_role').toString();
     print("-------user role ----------------------");
     print(c_role);
+    print("-------user role ----------------------");
+
     return c_role;
   }
 

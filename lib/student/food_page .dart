@@ -52,7 +52,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
   String UserName = "";
   String email = "";
   String image = "";
-  String canteenOpenCloseStatus = "" ;
+  dynamic canteenOpenCloseStatus = "" ;
 
   @override
   void initState() {
@@ -245,7 +245,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
             child: SingleChildScrollView(
               child: Padding(
                   padding: const EdgeInsets.all(0.0),
-                  child: SingleChildScrollView(
+                  child: Container(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
@@ -275,6 +275,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.white60),
                                 ),
+                                const SizedBox(height: 15),
                                 Text(
                                   canteenOpenCloseStatus == 1
                                       ? "Open"
@@ -285,28 +286,30 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                                       fontWeight:
                                       FontWeight.w400),
                                 ),
-                                const SizedBox(height: 15),
-                                Row(
+                                 UserName != "" ? Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image(
+                                    image != "" ?
+                                     Image(
                                       image: NetworkImage(image),
                                       height: 40,
-                                    ),
-                                    SizedBox(
-                                      width: 20,
+                                    ) : const SizedBox(width: 0,),
+                                    image != "" ? const SizedBox(
+                                      height: 20,
+                                    ) : const SizedBox(
+                                      height: 0,
                                     ),
                                     Text(
-                                      "$UserName",
+                                      UserName == "" ? "" : UserName,
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
                                           fontSize: 15, color: Colors.white60),
                                     ),
                                   ],
-                                ),
+                                ) : SizedBox(height: 0,),
                                 const SizedBox(height: 25),
                                 const Text(
-                                  'Food Item Center',
+                                  'Available Food Items ',
                                   style: TextStyle(
                                       fontSize: 25,
                                       fontWeight: FontWeight.bold,
