@@ -10,30 +10,32 @@ import 'package:ucsc_canteen_19001355/student/login_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 const List<String> list = <String>['true', 'false'];
-
 class FoodItem {
   String? name;
   String? price;
   String? image;
   String? docId;
   String? available;
+  String? SpecialNote;
 
   FoodItem();
 
   Map<String, dynamic> tojson() => {
-        'name': name,
-        'price': price,
-        "image": image,
-        "docId": docId,
-        "available": available
-      };
+    'name': name,
+    'price': price,
+    "image": image,
+    "docId": docId,
+    "available": available,
+    "SpecialNote": SpecialNote
+  };
 
   FoodItem.fromSnapshot(snapshot)
       : name = snapshot.data()['name'],
         price = snapshot.data()['price'],
         image = snapshot.data()['image'],
         docId = snapshot.data()['docId'],
-        available = snapshot.data()['available'];
+        available = snapshot.data()['available'],
+        SpecialNote = snapshot.data()['SpecialNote'];
 }
 
 class StudentFoodScreen extends StatefulWidget {
@@ -50,12 +52,14 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
   String UserName = "";
   String email = "";
   String image = "";
+  String canteenOpenCloseStatus = "" ;
+
   @override
   void initState() {
     super.initState();
     // getAllFoodItems();
     getData();
-    getUserData();
+    getCanteenStatus();
   }
 
   Future getCanteenStatus() async {
@@ -68,7 +72,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
         print('Document data: ${documentSnapshot.data()}');
         try {
           setState(() {
-            data = documentSnapshot.get(FieldPath(['value']));
+            canteenOpenCloseStatus = documentSnapshot.get(FieldPath(['value']));
           });
           print('Document data: ${data}');
         } on StateError catch (e) {
@@ -266,10 +270,20 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                                 ),
                                 const SizedBox(height: 15),
                                 const Text(
-                                  'Presented by Hansana Ranaweera 19001355 ',
+                                  'Presented by Hansana Ranaweera 19001355 '  ,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                       fontSize: 15, color: Colors.white60),
+                                ),
+                                Text(
+                                  canteenOpenCloseStatus == 1
+                                      ? "Open"
+                                      : "Closed",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontWeight:
+                                      FontWeight.w400),
                                 ),
                                 const SizedBox(height: 15),
                                 Row(
