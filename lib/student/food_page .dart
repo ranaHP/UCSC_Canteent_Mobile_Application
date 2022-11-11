@@ -10,6 +10,7 @@ import 'package:ucsc_canteen_19001355/student/login_screen.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 const List<String> list = <String>['true', 'false'];
+
 class FoodItem {
   String? name;
   String? price;
@@ -21,13 +22,13 @@ class FoodItem {
   FoodItem();
 
   Map<String, dynamic> tojson() => {
-    'name': name,
-    'price': price,
-    "image": image,
-    "docId": docId,
-    "available": available,
-    "SpecialNote": SpecialNote
-  };
+        'name': name,
+        'price': price,
+        "image": image,
+        "docId": docId,
+        "available": available,
+        "SpecialNote": SpecialNote
+      };
 
   FoodItem.fromSnapshot(snapshot)
       : name = snapshot.data()['name'],
@@ -52,7 +53,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
   String UserName = "";
   String email = "";
   String image = "";
-  dynamic canteenOpenCloseStatus = "" ;
+  dynamic canteenOpenCloseStatus = "";
 
   @override
   void initState() {
@@ -86,59 +87,25 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
 
   dynamic data;
 
-  Future<void> _showMyDialogforUpdate(
-      String name, String price, String image, String docId) async {
-    TextEditingController nameController = TextEditingController();
-    TextEditingController priceController = TextEditingController();
-    nameController.text = name;
-    priceController.text = price;
+  Future<void> _showMyDialogViewMore(FoodItem fi) async {
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Update Food Item',
+          title: const Text('Food Item Details',
               style: TextStyle(color: Colors.black87)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
-                const Text('Form - ', style: TextStyle(color: Colors.black54)),
+                 Text('Name - ${fi.name} ', style: TextStyle(color: Colors.black54)),
+                Text('Price - Rs ${fi.price}.00 ', style: TextStyle(color: Colors.black54)),
+                Text('Special Note - ${fi.SpecialNote == null ? "no" : fi.SpecialNote} ', style: TextStyle(color: Colors.black54)),
                 Container(height: 10),
                 Container(
-                  padding: const EdgeInsets.all(10),
-                  child: TextField(
-                    controller: nameController,
-                    autofocus: true,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Food Name',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: TextField(
-                    controller: priceController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Price',
-                    ),
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue, // Background color
-                    ),
-                    child: const Text(
-                      'Upload Image',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: (Image.network(fi.image == "" ? 'https://i.imgur.com/sUFH1Aq.png' : fi.image.toString()))
                 ),
               ],
             ),
@@ -146,7 +113,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
           actions: <Widget>[
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary: Colors.red, // Background color
+                backgroundColor: Colors.grey, // Background color
               ),
               child: const Text(
                 'Cansle',
@@ -156,25 +123,88 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                 Navigator.of(context).pop();
               },
             ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.green, // Background color
-              ),
-              child: const Text('Submit',
-                  style: TextStyle(color: Colors.white, fontSize: 15)),
-              onPressed: () {
-                final CollectionReference _collectionRef =
-                    FirebaseFirestore.instance.collection('food_item');
-                _collectionRef.doc(docId).update({
-                  "name": nameController.text,
-                  "price": priceController.text,
-                  "image":
-                      "https://www.nfpb.lk/wp-content/uploads/2022/10/plate-done-343x338.png"
-                });
-                getData();
-                Navigator.of(context).pop();
-              },
+
+
+          ],
+        );
+      },
+    );
+  }
+
+
+
+  Future<void> _showMyDialogAddtoCart(FoodItem fi) async {
+    TextEditingController quantityController = TextEditingController();
+    quantityController.text = "1";
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Food Item Details',
+              style: TextStyle(color: Colors.black87)),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Name - ${fi.name} ', style: TextStyle(color: Colors.black54)),
+                Text('Price - Rs ${fi.price}.00 ', style: TextStyle(color: Colors.black54)),
+                Text('Special Note - ${fi.SpecialNote == null ? "no" : fi.SpecialNote} ', style: TextStyle(color: Colors.black54)),
+                Container(height: 10),
+                Container(
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                    child: (Image.network(fi.image == "" ? 'https://i.imgur.com/sUFH1Aq.png' : fi.image.toString()))
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+                  child: TextField(
+                    controller: quantityController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Quantity',
+                    ),
+                  ),
+                ),
+
+              ],
             ),
+
+          ),
+          actions: <Widget>[
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey, // Background color
+                ),
+                child: const Text(
+                  'Cansel',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ),
+
+            Container(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // Background color
+                ),
+
+                child: const Text(
+                  'Add to Cart',
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                ),
+                onPressed: () {
+
+                },
+
+              ),
+            ),
+
           ],
         );
       },
@@ -250,203 +280,245 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: <Widget>[
                         Container(
-                            width: double.infinity,
-                            height: 400,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Image(
-                                  image: const AssetImage(
-                                      "assets/images/logo.png"),
-                                  height: 100,
-                                ),
-                                const SizedBox(height: 25),
-                                const Text(
-                                  'Welcome to UCSC Canteen ',
-                                  style: const TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white),
-                                ),
-                                const SizedBox(height: 15),
-                                const Text(
-                                  'Presented by Hansana Ranaweera 19001355 '  ,
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.white60),
-                                ),
-                                const SizedBox(height: 15),
-                                Text(
-                                  canteenOpenCloseStatus == 1
-                                      ? "Open"
-                                      : "Closed",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 25,
-                                      fontWeight:
-                                      FontWeight.w400),
-                                ),
-                                 UserName != "" ? Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    image != "" ?
-                                     Image(
-                                      image: NetworkImage(image),
-                                      height: 40,
-                                    ) : const SizedBox(width: 0,),
-                                    image != "" ? const SizedBox(
-                                      height: 20,
-                                    ) : const SizedBox(
-                                      height: 0,
-                                    ),
-                                    Text(
-                                      UserName == "" ? "" : UserName,
-                                      textAlign: TextAlign.center,
-                                      style: const TextStyle(
-                                          fontSize: 15, color: Colors.white60),
-                                    ),
-                                  ],
-                                ) : SizedBox(height: 0,),
-                                const SizedBox(height: 25),
-                                const Text(
-                                  'Available Food Items ',
-                                  style: TextStyle(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.deepOrange),
-                                ),
-                              ],
-                            )),
-                        Container(
-                          color: Colors.white54,
-                          padding: const EdgeInsets.all(10),
-                          child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: _myfoodItemList.length,
-                            itemBuilder: ((context, index) {
-                              return _myfoodItemList[index]
-                                          .available
-                                          .toString() ==
-                                      "true"
-                                  ? Container(
-                                      height: 200,
-                                      padding: const EdgeInsets.all(10),
-                                      margin: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: const Color.fromARGB(
-                                            255, 234, 231, 231),
-                                        borderRadius: const BorderRadius.only(
-                                            topLeft: Radius.circular(10),
-                                            topRight: Radius.circular(10),
-                                            bottomLeft: Radius.circular(10),
-                                            bottomRight: Radius.circular(10)),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: Colors.grey.withOpacity(0.5),
-                                            spreadRadius: 2,
-                                            blurRadius: 2,
-                                            offset: const Offset(0,
-                                                3), // changes position of shadow
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Image(
-                                            image: NetworkImage(
-                                                _myfoodItemList[index]
-                                                    .image
-                                                    .toString()),
-                                            height: 120,
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Column(
-                                                children: [
-                                                  const Text(
-                                                    " Name ",
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    "${_myfoodItemList[index].name.toString()}",
-                                                    style: const TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                ],
-                                              ),
-                                              Column(
-                                                children: [
-                                                  const Text(
-                                                    " Price (Rs)",
-                                                    style:
-                                                        TextStyle(fontSize: 12),
-                                                  ),
-                                                  const SizedBox(
-                                                    height: 10,
-                                                  ),
-                                                  Text(
-                                                    "${_myfoodItemList[index].price.toString()}.00",
-                                                    style: const TextStyle(
-                                                        fontSize: 20,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                ],
+                          width: double.infinity,
+                          height: 400,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Image(
+                                image: AssetImage("assets/images/logo.png"),
+                                height: 100,
+                              ),
+                              const SizedBox(height: 25),
+                              const Text(
+                                'Welcome to UCSC Canteen ',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                              const SizedBox(height: 15),
+                              const Text(
+                                'Presented by Hansana Ranaweera 19001355 ',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 15, color: Colors.white60),
+                              ),
+                              UserName != ""
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        image != ""
+                                            ? Image(
+                                                image: NetworkImage(image),
+                                                height: 40,
                                               )
-                                            ],
-                                          ),
-                                          Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: (() {
-                                                  final CollectionReference
-                                                      _collectionRef =
-                                                      FirebaseFirestore.instance
-                                                          .collection(
-                                                              'food_item');
-                                                  _collectionRef
-                                                      .doc(
-                                                          _myfoodItemList[index]
-                                                              .docId)
-                                                      .delete();
-                                                  getData();
-                                                }),
-                                                style: ButtonStyle(
-                                                  backgroundColor:
-                                                      MaterialStateProperty.all<
-                                                          Color>(Colors.red),
-                                                ),
-                                                child: Row(children: const [
-                                                  Icon(
-                                                    Icons.shopping_cart,
-                                                    color: Colors.white,
-                                                  ),
-                                                ]),
+                                            : const SizedBox(
+                                                width: 0,
                                               ),
-                                            ],
-                                          )
-                                        ],
-                                      ),
+                                        image != ""
+                                            ? const SizedBox(
+                                                height: 20,
+                                              )
+                                            : const SizedBox(
+                                                height: 0,
+                                              ),
+                                        Text(
+                                          UserName == "" ? "" : UserName,
+                                          textAlign: TextAlign.center,
+                                          style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.white60),
+                                        ),
+                                      ],
                                     )
                                   : const SizedBox(
                                       height: 0,
-                                    );
-                            }),
+                                    ),
+                              const SizedBox(height: 25),
+                              ElevatedButton(
+                                  onPressed: () => {},
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orange,
+                                    shadowColor: Colors.orange,
+                                  ),
+                                  child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const <Widget>[
+                                        Icon(Icons.shopping_cart,
+                                            color: Colors.white),
+                                        Text(
+                                          'My Shopping Cart',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: Colors.amber,
+                                      borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10),
+                                          topRight: Radius.circular(10),
+                                          bottomLeft: Radius.circular(10),
+                                          bottomRight: Radius.circular(10)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color:
+                                              Colors.black26.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 1,
+                                          offset: const Offset(0,
+                                              3), // changes position of shadow
+                                        ),
+                                      ],
+                                    ),
+                                  )),
+                              const SizedBox(height: 25),
+                              const Text(
+                                'Available Food Items ',
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.deepOrange),
+                              ),
+                            ],
                           ),
                         ),
+                        canteenOpenCloseStatus == 1
+                            ? Container(
+                                color: Colors.white54,
+                                padding: const EdgeInsets.all(10),
+                                height: 500,
+                                child: _myfoodItemList.length > 0 ?  ListView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: false,
+                                  itemCount: _myfoodItemList.length,
+                                  itemBuilder: ((context, index) {
+                                    return _myfoodItemList[index]
+                                                .available
+                                                .toString() ==
+                                            "true"
+                                        ? Container(
+                                            height: 200,
+                                            padding: const EdgeInsets.all(10),
+                                            margin: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: const Color.fromARGB(
+                                                  255, 234, 231, 231),
+                                              borderRadius:
+                                                  const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(10),
+                                                      topRight:
+                                                          Radius.circular(10),
+                                                      bottomLeft:
+                                                          Radius.circular(10),
+                                                      bottomRight:
+                                                          Radius.circular(10)),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  color: Colors.grey
+                                                      .withOpacity(0.5),
+                                                  spreadRadius: 2,
+                                                  blurRadius: 2,
+                                                  offset: const Offset(0,
+                                                      3), // changes position of shadow
+                                                ),
+                                              ],
+                                            ),
+
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.white,
+                                                shadowColor: Colors.orange,
+                                              ),
+                                              onPressed: () => {
+                                                _showMyDialogAddtoCart(_myfoodItemList[index])
+                                              }
+                                              , child:Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Image(
+                                                  image: NetworkImage(
+                                                      _myfoodItemList[index]
+                                                          .image
+                                                          .toString()),
+                                                  height: 150,
+                                                ),
+                                                Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceAround,
+                                                  children: [
+                                                    Column(
+                                                      children: [
+                                                        const Text(
+                                                          " Name ",
+                                                          style: TextStyle(
+                                                              fontSize: 12),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          "${_myfoodItemList[index].name.toString()}",
+                                                          style: const TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Column(
+                                                      children: [
+                                                        const Text(
+                                                          " Price (Rs)",
+                                                          style: TextStyle(
+                                                              fontSize: 12),
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 10,
+                                                        ),
+                                                        Text(
+                                                          "${_myfoodItemList[index].price.toString()}.00",
+                                                          style: const TextStyle(
+                                                              fontSize: 20,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                        ),
+                                                      ],
+                                                    )
+                                                  ],
+                                                ),
+
+                                              ],
+                                            ),)
+                                          )
+                                        : const SizedBox(
+                                            height: 0,
+                                          );
+                                  })
+                                ):  Center(child: CircularProgressIndicator()),
+                              )
+                            : Container(
+                                height: 150,
+                                color: Colors.red,
+                                child: const Center(
+                                  child: Text(
+                                    "Currently Canteen is Closed",
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ),),
                         const SizedBox(height: 40),
                         const SizedBox(height: 40),
                         ElevatedButton(
@@ -457,7 +529,6 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                               return const LoginScreen();
                             }), ModalRoute.withName('/'));
                           },
-
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
@@ -466,13 +537,12 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ),
-
                         ),
                         const SizedBox(height: 40),
                       ],
                     ),
-                  )),
-            )),
+                  ),),
+            ),),
       ),
     );
   }

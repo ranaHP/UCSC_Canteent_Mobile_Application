@@ -81,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final FirebaseAuth auth = FirebaseAuth.instance;
 
   Future<void> signup(BuildContext context) async {
+    WidgetsFlutterBinding.ensureInitialized();
     final GoogleSignIn googleSignIn = GoogleSignIn();
     final GoogleSignInAccount? googleSignInAccount =
         await googleSignIn.signIn();
