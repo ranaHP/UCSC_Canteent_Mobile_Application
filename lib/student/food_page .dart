@@ -1,17 +1,12 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ucsc_canteen_19001355/authentication.dart';
-import 'package:ucsc_canteen_19001355/staff/canteen_home_page.dart';
 import 'package:ucsc_canteen_19001355/student/login_screen.dart';
-// ignore: import_of_legacy_library_into_null_safe
 import 'package:google_sign_in/google_sign_in.dart';
 
 const List<String> list = <String>['true', 'false'];
@@ -437,7 +432,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                         ),
                         const SizedBox(height: 40),
                         const SizedBox(height: 40),
-                        RaisedButton(
+                        ElevatedButton(
                           onPressed: () {
                             signOutGoogle();
                             Navigator.of(context).pushAndRemoveUntil(
@@ -445,7 +440,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                               return const LoginScreen();
                             }), ModalRoute.withName('/'));
                           },
-                          color: Colors.red,
+
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: Text(
@@ -454,9 +449,7 @@ class _StudentFoodScreenState extends State<StudentFoodScreen> {
                                   TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ),
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40)),
+
                         ),
                         const SizedBox(height: 40),
                       ],

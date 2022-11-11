@@ -20,6 +20,9 @@ dependencies:
   provider: ^6.0.4
   shared_preferences: ^2.0.15
   cloud_firestore: ^4.0.4
+  firebase_storage: ^11.0.5
+  permission_handler: ^10.2.0
+  image_picker: ^0.8.6
 
 
 

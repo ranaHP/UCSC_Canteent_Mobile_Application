@@ -1,18 +1,17 @@
 // ignore_for_file: sort_child_properties_last
 
-import 'dart:convert';
-import 'dart:ffi';
+
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ucsc_canteen_19001355/authentication.dart';
 import 'package:ucsc_canteen_19001355/staff/canteen_food_page%20.dart';
 import 'package:ucsc_canteen_19001355/student/login_screen.dart';
 // ignore: import_of_legacy_library_into_null_safe
 import 'package:google_sign_in/google_sign_in.dart';
+
 
 class StaffHomeScreen extends StatefulWidget {
   const StaffHomeScreen({Key? key}) : super(key: key);
@@ -521,7 +520,7 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
                         const SizedBox(height: 40),
                         // Image(image: NetworkImage(c_user.photoURL)),
                         const SizedBox(height: 40),
-                        RaisedButton(
+                        ElevatedButton(
                           onPressed: () {
                             signOutGoogle();
                             Navigator.of(context).pushAndRemoveUntil(
@@ -529,18 +528,16 @@ class _StaffHomeScreenState extends State<StaffHomeScreen> {
                               return const LoginScreen();
                             }), ModalRoute.withName('/'));
                           },
-                          color: Colors.red,
+
                           child: const Padding(
                             padding: EdgeInsets.all(8.0),
                             child: const Text(
                               'Sign Out',
                               style:
-                                  TextStyle(fontSize: 20, color: Colors.white),
+                                  const TextStyle(fontSize: 20, color: Colors.white),
                             ),
                           ),
-                          elevation: 5,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(40)),
+
                         )
                       ],
                     ),

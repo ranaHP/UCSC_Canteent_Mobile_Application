@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   scale: 5,
                 ),
                 SizedBox(height: 40),
-                RaisedButton(
+                ElevatedButton(
                   onPressed: () {
                     signOutGoogle();
                     Navigator.of(context).pushAndRemoveUntil(
@@ -50,18 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       return LoginScreen();
                     }), ModalRoute.withName('/'));
                   },
-                  color: Colors.black,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
                       'Sign Out',
                       style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-                  ),
-                  elevation: 5,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40)),
-                )
+                    )
+                  ) )
               ],
             ),
           ),
