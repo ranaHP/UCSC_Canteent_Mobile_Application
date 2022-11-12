@@ -21,7 +21,6 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController EmailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-
   Future<void> _showMyDialog(String result) async {
     return showDialog<void>(
       context: context,
@@ -67,7 +66,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login() {
     AuthenticationHelper()
-        .signIn(email: EmailController.text, password: passwordController.text , role: "student")
+        .signIn(
+            email: EmailController.text,
+            password: passwordController.text,
+            role: "student")
         .then((result) {
       if (result == null) {
         Navigator.pushReplacement(context,
@@ -113,6 +115,9 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          const SizedBox(
+            height: 100,
+          ),
           const Image(
             image: AssetImage("assets/images/logo_c.png"),
             height: 200,

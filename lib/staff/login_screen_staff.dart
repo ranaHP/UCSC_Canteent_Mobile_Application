@@ -64,7 +64,10 @@ class _LoginScreenStaffState extends State<LoginScreenStaff> {
     // passwordController.text = "cybertcc123";
 
     AuthenticationHelper()
-        .signIn(email: EmailController.text, password: passwordController.text, role: "staff")
+        .signIn(
+            email: EmailController.text,
+            password: passwordController.text,
+            role: "staff")
         .then((result) {
       if (result == null) {
         Navigator.pushReplacement(context,
@@ -90,7 +93,11 @@ class _LoginScreenStaffState extends State<LoginScreenStaff> {
       body: SingleChildScrollView(
           child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
+          const SizedBox(
+            height: 100,
+          ),
           const Image(
             image: AssetImage("assets/images/logo_c.png"),
             height: 200,
